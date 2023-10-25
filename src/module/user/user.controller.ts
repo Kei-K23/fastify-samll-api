@@ -1,8 +1,24 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { createUser, findUserByEmail } from "./user.service";
+import { createUser, findUserByEmail, getAllUser } from "./user.service";
 import { CreateUserInput, CreateUserLoginInput } from "./user.schema";
 import { verifyPassword } from "../../utils/hash";
 import { fastify } from "../..";
+
+export async function getAllUserHandler(
+  req: FastifyRequest,
+  res: FastifyReply
+) {
+  try {
+    const users = await getAllUser();
+    if (users.length < 1)
+      return res.status(400).send({ error: "user cannot find" });
+
+    return res.status(200).send(users);
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).send(e);
+  }
+}
 
 export async function createUserHandler(
   req: FastifyRequest<{
@@ -42,7 +58,11 @@ export async function loginUserHandler(
 
     const { password, salt, ...rest } = user;
 
-    return res.status(200).send({ accessToken: fastify.jwt.sign(rest) });
+    return res.status(200).send({
+      accessToken: fastify.jwt.sign(rest, {
+        expiresIn: "1m",
+      }),
+    });
   } catch (e: any) {
     console.error(e);
     return res.status(500).send(e);

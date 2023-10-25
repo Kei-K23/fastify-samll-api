@@ -1,5 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { createUserHandler, loginUserHandler } from "./user.controller";
+import {
+  createUserHandler,
+  getAllUserHandler,
+  loginUserHandler,
+} from "./user.controller";
 import { $ref } from "./user.schema";
 
 export default async function (fastify: FastifyInstance) {
@@ -27,5 +31,10 @@ export default async function (fastify: FastifyInstance) {
       },
     },
     loginUserHandler
+  );
+  fastify.get(
+    "/all",
+    { preHandler: [fastify.authentication] },
+    getAllUserHandler
   );
 }

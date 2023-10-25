@@ -8,6 +8,12 @@ export const fastify = Fastify({
 });
 const port = 8090;
 
+declare module "fastify" {
+  export interface FastifyInstance {
+    authentication: any;
+  }
+}
+
 fastify.register(fastifyJwt, {
   secret:
     "52424dgd363sdf4131lkjsdfljjr3jri87734y28424y82hfiuhwirryvj1314!rkfjf",

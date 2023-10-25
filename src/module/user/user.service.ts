@@ -37,3 +37,22 @@ export async function findUserByEmail(email: string) {
     db.$disconnect();
   }
 }
+
+export async function getAllUser() {
+  try {
+    const users = await db.user.findMany({
+      select: {
+        email: true,
+        name: true,
+        id: true,
+      },
+    });
+    if (!users || users.length < 1) throw new Error("user cannot find");
+
+    return users;
+  } catch (e: any) {
+    throw new Error(e);
+  } finally {
+    db.$disconnect();
+  }
+}
