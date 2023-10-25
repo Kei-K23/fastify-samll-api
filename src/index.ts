@@ -1,10 +1,34 @@
-import Fastify from "fastify";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import fastifyJwt from "@fastify/jwt";
 import userRoute from "./module/user/user.route";
+import { userSchema } from "./module/user/user.schema";
 
 const fastify = Fastify({
   logger: true,
 });
 const port = 8090;
+
+fastify.register(fastifyJwt, {
+  secret:
+    "52424dgd363sdf4131lkjsdfljjr3jri87734y28424y82hfiuhwirryvj1314!rkfjf",
+});
+
+fastify.decorate(
+  "authentication",
+  async function (req: FastifyRequest, res: FastifyReply) {
+    try {
+      await req.jwtVerify();
+    } catch (e: any) {
+      console.error(e);
+      return res.status(500).send({ error: e.message });
+    }
+  }
+);
+
+//register validation shema for user route
+for (const schema of userSchema) {
+  fastify.addSchema(schema);
+}
 
 // register route
 fastify.register(userRoute, { prefix: "api/user" });
