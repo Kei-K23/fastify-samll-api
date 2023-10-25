@@ -3,7 +3,7 @@ import fastifyJwt from "@fastify/jwt";
 import userRoute from "./module/user/user.route";
 import { userSchema } from "./module/user/user.schema";
 
-const fastify = Fastify({
+export const fastify = Fastify({
   logger: true,
 });
 const port = 8090;

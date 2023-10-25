@@ -26,7 +26,7 @@ export async function createUser(input: CreateUserInput) {
   }
 }
 
-export async function findUserByIDAndEmail(id: number, email: string) {
+export async function findUserByEmail(email: string) {
   try {
     const user = await db.user.findUnique({ where: { email } });
     if (!user) throw new Error("user cannot find");

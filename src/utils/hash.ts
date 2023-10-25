@@ -18,5 +18,5 @@ export function verifyPassword(
     .pbkdf2Sync(candidatePassword, salt, 1000, 64, "sha512")
     .toString("hex");
 
-  return candidatePassword === hash;
+  return candidatePassword_hash === hash;
 }
